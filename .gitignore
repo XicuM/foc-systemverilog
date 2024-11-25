@@ -1,0 +1,10 @@
+.Xil
+project/
+workspace/
+*.log
+__pycache__/
+.pytest_cache/
+.sim/
+*.None
+env.py
+build/
