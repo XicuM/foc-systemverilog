@@ -18,6 +18,23 @@ from_unsigned = lambda x, F: x.value.integer/(1<<F)
 from_signed = lambda x, F: x.value.signed_integer/(1<<F)
 
 
+class Conversion:
+    def __init__(self, dut):
+        self.fractional_bits = dut.FRACTIONAL_BITS.value
+    
+    def to_unsigned(self, x):
+        return int(x*(1<<self.fractional_bits))
+
+    def to_signed(self, x):
+        return int(x*(1<<self.fractional_bits))
+    
+    def from_unsigned(self, x):
+        return x.value.integer/(1<<self.fractional_bits)
+    
+    def from_signed(self, x):
+        return x.value.signed_integer/(1<<self.fractional_bits)
+
+
 def plot_signals():
     settings_path = Path(__file__).parent/'.sim'/'settings.yaml'
     if os.path.exists(settings_path):
@@ -26,19 +43,23 @@ def plot_signals():
     else: return False
 
 
-async def init_ff(dut):
+def init_ff(test_function):
+
+    async def wrapper(dut):
         await cocotb.start(Clock(dut.clk, 2, units='ns').start())
         dut.nrst.value = 0
         dut.en.value = 1
         await Timer(2, units='ns')
         dut.nrst.value = 1
+        await test_function(dut)
+
+    return wrapper
 
 
 def run_test(
     source: str, 
     top_module: str,
     test_cases: list[str] = [],
-    parameters: dict = {},
     open_waveform: bool = False
 ):
     
@@ -52,7 +73,6 @@ def run_test(
         sources=[vivado_path/'src'/Path(src_file)],
         hdl_toplevel=top_module,
         build_dir=vivado_path/'test'/'.sim'/top_module,
-        parameters=parameters,
         waves=open_waveform
     )
     runner.test(

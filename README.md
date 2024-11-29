@@ -34,8 +34,8 @@ flowchart LR
 
     %% Speed Control
     subgraph sc[Speed Control]
-        sum_ω(("..")):::sum
-        pi_ω["PI"]:::box
+        sum_ω((x)):::sum
+        pi_ω[PI]:::box
     end
     sc:::group
 
@@ -43,14 +43,14 @@ flowchart LR
 
     %% Current Control
     subgraph cc[Current Control and Decoupling]
-        sum_id(("..")):::sum
-        sum_iq(("..")):::sum
-        pi_id["PI"]:::box
-        pi_iq["PI"]:::box
+        sum_id((x)):::sum
+        sum_iq((x)):::sum
+        pi_id[PI]:::box
+        pi_iq[PI]:::box
         decopling_d["—ωL<sub>q</sub>I<sub>q</sub>"]:::nobox
         decoupling_q["ωL<sub>d</sub>I<sub>d</sub> + λ<sub>m</sub>"]:::nobox
-        sum_vd(("..")):::sum
-        sum_vq(("..")):::sum
+        sum_vd((x)):::sum
+        sum_vq((x)):::sum
     end
     cc:::group
 
@@ -132,3 +132,4 @@ flowchart LR
 ## Developer notes
 
 - [ ] Investigate how to implement two modules in the same testfile in cocotb
+- [ ] Change test code so that all sources are included

@@ -11,8 +11,8 @@ async def saturation_tb(dut):
 
     # Dump signals
     y = []
-    for i in x:
-        dut.x.value = to_signed(i, F)
+    for x_i in x:
+        dut.x.value = to_signed(x_i, F)
         await Timer(2, units='ns')
         y.append(from_signed(dut.y, F))
     

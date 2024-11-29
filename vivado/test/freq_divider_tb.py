@@ -1,11 +1,10 @@
 from vivado.test.utils import *
 
+
 @cocotb.test
+@init_ff
 async def freq_divider_tb(dut):
     N = 7000
-
-    # Initialize sequential logic
-    await init_ff(dut)
 
     # Dump signals
     clk = []

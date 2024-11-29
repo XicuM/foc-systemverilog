@@ -1,14 +1,12 @@
 from vivado.test.utils import *
 
 @cocotb.test
+@init_ff
 async def triangular_wave_tb(dut):
 
     # Define signals
     F = 5
     t = range(200)
-
-    # Initialize sequential logic
-    await init_ff(dut)
 
     # Dump signals
     output = []
