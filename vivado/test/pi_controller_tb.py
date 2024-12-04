@@ -35,7 +35,7 @@ async def pi_controller_tb(dut):
         dut.reference.value = to_signed(u[t_i], FRACTIONAL_BITS)
         dut.feedback.value = to_signed(0, FRACTIONAL_BITS)
         await RisingEdge(dut.clk)
-        u = from_signed(dut.output.value, FRACTIONAL_BITS)
+        u = from_signed(dut.output, FRACTIONAL_BITS)
         cl[t_i] = ct.forced_response()
 
     if plot_signals():

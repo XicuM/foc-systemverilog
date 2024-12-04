@@ -5,7 +5,7 @@ module magnitude #(
     parameter int FRACTIONAL_BITS = 12,
     parameter int ITERATIONS = 16
 )(
-    input wire [WIDTH-1:0] x_in, y_in,
+    input logic [WIDTH-1:0] x_in, y_in,
     output logic [WIDTH-1:0] out
 );
 
@@ -47,5 +47,5 @@ module magnitude #(
         out = out_temp > 0 ? 
             out_temp >>> FRACTIONAL_BITS : -out_temp >>> FRACTIONAL_BITS;
     end
-    
+  
 endmodule
