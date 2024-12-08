@@ -1,10 +1,10 @@
 `timescale 1ns / 1ps
 
 module pi_controller #(
-    parameter int I_WIDTH = 10,
-    parameter int I_FRACTIONAL_BITS = 9,
-    parameter int O_WIDTH = 10,
-    parameter int O_FRACTIONAL_BITS = 9,
+    parameter I_WIDTH = 10,
+    parameter I_FRACTIONAL_BITS = 9,
+    parameter O_WIDTH = 10,
+    parameter O_FRACTIONAL_BITS = 9,
     parameter bool ANTI_WINDUP = 1
 )(
     input logic clk, en, nrst,                      // Clock, enable, reset

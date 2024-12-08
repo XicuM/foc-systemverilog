@@ -9,8 +9,8 @@ parameter real PI_OVER_2 = PI / 2.0;
 // Clarke Transform
 
 module clarke_transform #(
-    parameter int WIDTH = 10,
-    parameter int FRACTIONAL_BITS = 9
+    parameter WIDTH = 10,
+    parameter FRACTIONAL_BITS = 9
 )(
     input logic signed [WIDTH-1:0] a, b,
     output logic signed [WIDTH-1:0] alpha, beta
@@ -32,11 +32,37 @@ endmodule
 
 
 // ---------------------------------------------------------------------
+// Inverse Clarke Transform
+
+module inv_clarke_transform #(
+    parameter WIDTH = 10,
+    parameter FRACTIONAL_BITS = 9
+)(
+    input logic signed [WIDTH-1:0] alpha, beta,
+    output logic signed [WIDTH-1:0] a, b, c
+);
+    
+    // Constants
+    localparam logic signed [WIDTH+FRACTIONAL_BITS-1:0] 
+        SQRT_3 = $rtoi((1<<FRACTIONAL_BITS)*$sqrt(3));
+    
+    // Local variables
+    logic signed [WIDTH+FRACTIONAL_BITS-1:0] temp;
+    
+    // Inverse Clarke transform equations
+    assign a = alpha;
+    assign temp = beta * SQRT_3;
+    assign b = (temp >>> FRACTIONAL_BITS) - (alpha >>> 1);
+    assign c = -(temp >>> FRACTIONAL_BITS) - (alpha >>> 1);
+
+endmodule
+
+// ---------------------------------------------------------------------
 // Park Transform
 
 module park_transform #(
-    parameter int WIDTH = 12,
-    parameter int FRACTIONAL_BITS = 8
+    parameter WIDTH = 12,
+    parameter FRACTIONAL_BITS = 8
 )(
     input logic signed [WIDTH-1:0] alpha, beta,
     input logic signed [WIDTH-1:0] angle,
@@ -61,10 +87,10 @@ endmodule
 // Inverse Park Transform
 
 module inv_park_transform #(
-    parameter int WIDTH = 12,
-    parameter int FRACTIONAL_BITS = 8
+    parameter WIDTH = 12,
+    parameter FRACTIONAL_BITS = 8
 )(
-    input logic signed [WIDTH-1:0] v, d,
+    input logic signed [WIDTH-1:0] d, q,
     input logic signed [WIDTH-1:0] angle,
     output logic signed [WIDTH-1:0] alpha, beta
 );
@@ -86,9 +112,9 @@ endmodule
 // Rotational CORDIC
 
 module cordic_rotation #(
-    parameter int WIDTH = 10,
-    parameter int FRACTIONAL_BITS = 8,
-    parameter int ITERATIONS = 16
+    parameter WIDTH = 10,
+    parameter FRACTIONAL_BITS = 8,
+    parameter ITERATIONS = 16
 )(
     input logic [WIDTH-1:0] x_in, y_in, z_in,
     output logic [WIDTH-1:0] x_out, y_out

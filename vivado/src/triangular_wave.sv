@@ -1,8 +1,8 @@
 `timescale 1ns / 1ps
 
 module triangular_wave #(
-    parameter int N = 6,
-    parameter int F = 5
+    parameter N = 6,
+    parameter F = 5
 )(
     input clk,
     input en,

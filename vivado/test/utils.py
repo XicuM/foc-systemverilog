@@ -7,6 +7,7 @@ from cocotb.runner import get_runner
 import cocotb
 from cocotb.triggers import Timer, FallingEdge, RisingEdge
 from cocotb.clock import Clock
+from cocotb.regression import TestFactory
 
 import numpy as np
 import matplotlib.pyplot as plt

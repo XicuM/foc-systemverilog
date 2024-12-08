@@ -1,9 +1,9 @@
 `timescale 1ns / 1ps
 
 module magnitude #(
-    parameter int WIDTH = 17,
-    parameter int FRACTIONAL_BITS = 12,
-    parameter int ITERATIONS = 16
+    parameter WIDTH = 17,
+    parameter FRACTIONAL_BITS = 12,
+    parameter ITERATIONS = 16
 )(
     input logic [WIDTH-1:0] x_in, y_in,
     output logic [WIDTH-1:0] out

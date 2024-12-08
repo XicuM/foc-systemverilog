@@ -1,7 +1,7 @@
 `timescale 1ns / 1ps
 
 module svpwm #(
-    parameter int WIDTH = 8
+    parameter WIDTH = 8
 )(
     input logic signed [WIDTH-1:0] alpha, beta,
     input logic [WIDTH-1:0] da_on, db_on, dc_on
@@ -63,8 +63,8 @@ endmodule
 
 
 module sector_selector #(
-    parameter int WIDTH = 10,
-    parameter int FRACTIONAL_BITS = 8
+    parameter WIDTH = 10,
+    parameter FRACTIONAL_BITS = 8
 )(
     input logic signed [WIDTH-1:0] alpha, beta,
     output logic [2:0] sector

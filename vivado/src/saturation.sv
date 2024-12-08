@@ -1,8 +1,8 @@
 `timescale 1ns / 1ps
 
 module saturation #(
-    parameter int N = 10,
-    parameter int F = 9
+    parameter N = 10,
+    parameter F = 9
 )(
     input logic signed [N-1:0] x,
     input logic signed [N-1:0] max,

@@ -1,7 +1,7 @@
 `timescale 1ns / 1ps
 
 module freq_divider #(
-    parameter int N = 6250   // Divide from 100 MHz to 16 kHz
+    parameter N = 6250   // Divide from 100 MHz to 16 kHz
 )(
     input logic clk, en, nrst,
     output logic ctrl_clk

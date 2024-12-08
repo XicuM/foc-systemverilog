@@ -1,8 +1,8 @@
 `timescale 1ns / 1ps
 
 module foc #(
-    parameter int N = 10,
-    parameter int F = 9
+    parameter N = 10,
+    parameter F = 9
 )(
     input logic signed [N-1:0] torque_ref,      // Reference torque
     input logic signed [N-1:0] speed_ref,       // Reference speed
@@ -37,8 +37,8 @@ endmodule
 
 
 interface control_params #(
-    parameter int N = 10,
-    parameter int F = 9
+    parameter N = 10,
+    parameter F = 9
 );
 
     logic signed [N-1:0] ki_ctrl_speed;
@@ -61,8 +61,8 @@ endinterface
 
 
 interface signals #(
-    parameter int N = 10,
-    parameter int F = 9
+    parameter N = 10,
+    parameter F = 9
 );
   
     logic signed [N-1:0] i_d_ref;

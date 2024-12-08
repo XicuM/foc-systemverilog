@@ -59,18 +59,18 @@ parameter real RES_TORQUE = 0.01;               // Torque resolution [Nm]
 parameter real RES_ANGLE = 0.0001;              // Angle resolution [rad]
 
 // Width of the fixed-point representation
-parameter WIDTH_VOLTAGE = $clog2((MAX_VOLTAGE / RES_VOLTAGE) + 1);
-parameter WIDTH_CURRENT = $clog2((MAX_CURRENT / RES_CURRENT) + 1);
-parameter WIDTH_SPEED = $clog2((MAX_SPEED / RES_SPEED) + 1);
-parameter WIDTH_TORQUE = $clog2((MAX_TORQUE / RES_TORQUE) + 1);
-parameter WIDTH_ANGLE = $clog2((MAX_ANGLE / RES_ANGLE) + 1);
+parameter N_BITS_VOLTAGE = $clog2((MAX_VOLTAGE / RES_VOLTAGE) + 1);
+parameter N_BITS_CURRENT = $clog2((MAX_CURRENT / RES_CURRENT) + 1);
+parameter N_BITS_SPEED = $clog2((MAX_SPEED / RES_SPEED) + 1);
+parameter N_BITS_TORQUE = $clog2((MAX_TORQUE / RES_TORQUE) + 1);
+parameter N_BITS_ANGLE = $clog2((MAX_ANGLE / RES_ANGLE) + 1);
 
 // Width of the fractional part
-parameter FRACTIONAL_VOLTAGE = WIDTH_VOLTAGE - $clog2(1 / RES_VOLTAGE);
-parameter FRACTIONAL_CURRENT = WIDTH_CURRENT - $clog2(1 / RES_CURRENT);
-parameter FRACTIONAL_SPEED = WIDTH_SPEED - $clog2(1 / RES_SPEED);
-parameter FRACTIONAL_TORQUE = WIDTH_TORQUE - $clog2(1 / RES_TORQUE);
-parameter FRACTIONAL_ANGLE = WIDTH_ANGLE - $clog2(1 / RES_ANGLE);
+parameter F_BITS_VOLTAGE = WIDTH_VOLTAGE - $clog2(1 / RES_VOLTAGE);
+parameter F_BITS_CURRENT = WIDTH_CURRENT - $clog2(1 / RES_CURRENT);
+parameter F_BITS_SPEED = WIDTH_SPEED - $clog2(1 / RES_SPEED);
+parameter F_BITS_TORQUE = WIDTH_TORQUE - $clog2(1 / RES_TORQUE);
+parameter F_BITS_ANGLE = WIDTH_ANGLE - $clog2(1 / RES_ANGLE);
 
 // ---------------------------------------------------------------------
 // Motor specifications
@@ -90,6 +90,6 @@ parameter real T_L = 0.1;                       // Load torque [Nm]
 // Others
 
 // Number of CORDIC iterations
-parameter int ITERATIONS = 16;
+parameter ITERATIONS = 16;
 
 `endif
