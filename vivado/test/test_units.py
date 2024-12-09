@@ -7,6 +7,13 @@ def test_clarke():
         test_cases=['clarke_transform_tb']
     )
 
+def test_inv_clarke():
+    run_test(
+        source='transforms.sv',
+        top_module='inv_clarke_transform',
+        test_cases=['inv_clarke_transform_tb']
+    )
+
 def test_park():
     run_test(
         source='transforms.sv',

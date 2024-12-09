@@ -10,7 +10,7 @@ parameter real PI_OVER_2 = PI / 2.0;
 
 module clarke_transform #(
     parameter WIDTH = 10,
-    parameter FRACTIONAL_BITS = 9
+    parameter FRACTIONAL_BITS = 8
 )(
     input logic signed [WIDTH-1:0] a, b,
     output logic signed [WIDTH-1:0] alpha, beta
@@ -36,7 +36,7 @@ endmodule
 
 module inv_clarke_transform #(
     parameter WIDTH = 10,
-    parameter FRACTIONAL_BITS = 9
+    parameter FRACTIONAL_BITS = 8
 )(
     input logic signed [WIDTH-1:0] alpha, beta,
     output logic signed [WIDTH-1:0] a, b, c
@@ -44,7 +44,7 @@ module inv_clarke_transform #(
     
     // Constants
     localparam logic signed [WIDTH+FRACTIONAL_BITS-1:0] 
-        SQRT_3 = $rtoi((1<<FRACTIONAL_BITS)*$sqrt(3));
+        SQRT_3 = $rtoi($itor(1<<(FRACTIONAL_BITS-1))*$sqrt(3));
     
     // Local variables
     logic signed [WIDTH+FRACTIONAL_BITS-1:0] temp;
