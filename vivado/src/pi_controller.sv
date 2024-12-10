@@ -5,7 +5,7 @@ module pi_controller #(
     parameter I_FRACTIONAL_BITS = 9,
     parameter O_WIDTH = 10,
     parameter O_FRACTIONAL_BITS = 9,
-    parameter bool ANTI_WINDUP = 1
+    parameter ANTI_WINDUP = 1
 )(
     input logic clk, en, nrst,                      // Clock, enable, reset
     input logic signed [I_WIDTH-1:0] r, y,          // Reference, feedback

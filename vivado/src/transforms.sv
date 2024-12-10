@@ -138,7 +138,7 @@ module cordic_rotation #(
     // Precomputed atan(2^-i) lookup table
     logic signed [WIDTH-1:0] ATAN_TABLE [0:ITERATIONS-1];
     generate
-        for (genvar i = 0; i < ITERATIONS; i++)
+        for (genvar i=0; i<ITERATIONS; i++)
             initial ATAN_TABLE[i] = $atan(2**(-i))*(1<<FRACTIONAL_BITS);
     endgenerate
 
@@ -146,40 +146,40 @@ module cordic_rotation #(
     always_comb begin
         if (x_in < 0) begin
             if (y_in < 0) begin     // Quadrant III
-                x[0] = y_in;    y[0] = -x_in;   z[0] = z_in - PI;
+                x[0] <= y_in;    y[0] <= -x_in;   z[0] <= z_in - PI;
             end else begin          // Quadrant II
-                x[0] = -y_in;   y[0] = -x_in;   z[0] = z_in + PI;
+                x[0] <= -y_in;   y[0] <= -x_in;   z[0] <= z_in + PI;
             end
         end else begin
             if (y_in < 0) begin     // Quadrant IV
-                x[0] = y_in;    y[0] = x_in;    z[0] = z_in + PI_OVER_2;
+                x[0] <= y_in;    y[0] <= x_in;    z[0] <= z_in + PI_OVER_2;
             end else begin          // Quadrant I
-                x[0] = x_in;    y[0] = y_in;    z[0] = z_in;
+                x[0] <= x_in;    y[0] <= y_in;    z[0] <= z_in;
             end
         end
     end
 
     // Unrolled CORDIC combinatorial pipeline
     always_comb begin
-        for (int i = 0; i < ITERATIONS; i++) begin
+        for (int i=0; i<ITERATIONS; i++) begin
             if (z[i] > 0) begin
-                x[i+1] = x[i] - (y[i] >>> i);
-                y[i+1] = y[i] + (x[i] >>> i);
-                z[i+1] = z[i] - ATAN_TABLE[i];
+                x[i+1] <= x[i] - (y[i] >>> i);
+                y[i+1] <= y[i] + (x[i] >>> i);
+                z[i+1] <= z[i] - ATAN_TABLE[i];
             end else begin
-                x[i+1] = x[i] + (y[i] >>> i);
-                y[i+1] = y[i] - (x[i] >>> i);
-                z[i+1] = z[i] + ATAN_TABLE[i];
+                x[i+1] <= x[i] + (y[i] >>> i);
+                y[i+1] <= y[i] - (x[i] >>> i);
+                z[i+1] <= z[i] + ATAN_TABLE[i];
             end
         end
     end
 
     // Output values
     always_comb begin
-        x_out_temp = x[ITERATIONS]*SCALING_FACTOR;
-        y_out_temp = y[ITERATIONS]*SCALING_FACTOR;
-        x_out = x_out_temp >>> FRACTIONAL_BITS;
-        y_out = y_out_temp >>> FRACTIONAL_BITS;
+        x_out_temp <= x[ITERATIONS]*SCALING_FACTOR;
+        y_out_temp <= y[ITERATIONS]*SCALING_FACTOR;
+        x_out <= x_out_temp >>> FRACTIONAL_BITS;
+        y_out <= y_out_temp >>> FRACTIONAL_BITS;
     end
     
 endmodule

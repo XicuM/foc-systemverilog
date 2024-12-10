@@ -37,9 +37,17 @@ module motor #(
         .q(v_q)
     );
 
-    // Calculate current
-    assign i_d = i_d + timestep * 1/Ls * (v_d - R * i_d - Ls * speed * i_q);
-
+    // Calculate currents
+    always_ff @(posedge clk) begin
+        if (!nrst) begin
+            i_d <= 0;
+            i_q <= 0;
+        end else if (en) begin
+            i_d <= i_d + timestep * 1/Ls * (v_d - R * i_d - Ls * speed * i_q);
+            i_q <= i_q + timestep * 1/Ls * (v_q - R * i_q + Ls * speed * i_d);
+        end
+    end
+    
     // Calculate angle
     logic signed [N_BITS_ANGLE+F_BITS_ANGLE-1:0] angle_temp;
     always_ff @(posedge clk) begin

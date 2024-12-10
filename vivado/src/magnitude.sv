@@ -17,7 +17,7 @@ module magnitude #(
     // Precompute the scaling factor
     function automatic real compute_gain;
         real gain = 1.0;
-        for (int i = 0; i < ITERATIONS; i++)
+        for (int i=0; i<ITERATIONS; i++)
             gain *= 1.0 / $sqrt(1.0 + 2.0**(-2*i));
         return gain;
     endfunction
@@ -31,11 +31,11 @@ module magnitude #(
         for (genvar i=0; i<ITERATIONS; i++) begin
             always_comb begin
                 if (((x[i]>0)&&(y[i]>0)) || ((x[i]<0)&&(y[i]<0))) begin
-                    x[i+1] = x[i] + (y[i] >>> i);
-                    y[i+1] = y[i] - (x[i] >>> i);
+                    x[i+1] <= x[i] + (y[i] >>> i);
+                    y[i+1] <= y[i] - (x[i] >>> i);
                 end else begin
-                    x[i+1] = x[i] - (y[i] >>> i);
-                    y[i+1] = y[i] + (x[i] >>> i);
+                    x[i+1] <= x[i] - (y[i] >>> i);
+                    y[i+1] <= y[i] + (x[i] >>> i);
                 end
             end
         end
@@ -43,8 +43,8 @@ module magnitude #(
 
     // Absolute value of the output
     always_comb begin
-        out_temp = x[ITERATIONS]*SCALING_FACTOR;
-        out = out_temp > 0 ? 
+        out_temp <= x[ITERATIONS]*SCALING_FACTOR;
+        out <= out_temp > 0 ? 
             out_temp >>> FRACTIONAL_BITS : -out_temp >>> FRACTIONAL_BITS;
     end
   

@@ -7,18 +7,14 @@ module freq_divider #(
     output logic ctrl_clk
 );
 
-    reg [$clog2(N):0] counter;
+    logic [$clog2(N):0] counter;
 
-    always_ff @(posedge clk) begin
+    assign ctrl_clk = ~|counter;
+
+    always_ff @(posedge clk)
         if (!nrst) counter <= 0;
         else if (en)
-            if (counter == 0) begin
-                ctrl_clk <= 1;
-                counter <= N - 1;
-            end else begin
-                ctrl_clk <= 0;
-                counter <= counter - 1;
-            end
-    end
+            if (ctrl_clk) counter <= N - 1;
+            else counter <= counter - 1'b1;
 
 endmodule

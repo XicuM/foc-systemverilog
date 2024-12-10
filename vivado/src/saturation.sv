@@ -1,23 +1,18 @@
 `timescale 1ns / 1ps
 
 module saturation #(
-    parameter N = 10,
-    parameter F = 9
+    parameter WIDTH = 10,
+    parameter FRACTIONAL_BITS = 9
 )(
-    input logic signed [N-1:0] x,
-    input logic signed [N-1:0] max,
-    input logic signed [N-1:0] min,
-    output logic signed [N-1:0] y
+    input logic signed [WIDTH-1:0] x,
+    input logic signed [WIDTH-1:0] max,
+    input logic signed [WIDTH-1:0] min,
+    output logic signed [WIDTH-1:0] y
 );
 
-    always_comb begin
-        if (x > max) begin
-            y = max;
-        end else if (x < min) begin
-            y = min;
-        end else begin
-            y = x;
-        end
-    end
+    always_comb
+        if (x > max) y <= max;
+        else if (x < min) y <= min;
+        else  y <= x;
 
 endmodule

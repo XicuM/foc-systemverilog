@@ -57,6 +57,15 @@ def init_ff(test_function):
     return wrapper
 
 
+def get_sources(dir):
+    sources = []
+    for root, _, files in os.walk(dir):
+        for file in files:
+            if file.endswith('.sv'):
+                sources.append(Path(root)/file)
+    return sources
+
+
 def run_test(
     source: str, 
     top_module: str,
@@ -71,7 +80,7 @@ def run_test(
 
     runner = get_runner(os.getenv('SIM', 'icarus'))
     runner.build(
-        sources=[vivado_path/'src'/Path(src_file)],
+        sources=get_sources(),
         hdl_toplevel=top_module,
         build_dir=vivado_path/'test'/'.sim'/top_module,
         waves=open_waveform
