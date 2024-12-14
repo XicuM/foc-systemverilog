@@ -57,42 +57,51 @@ def init_ff(test_function):
     return wrapper
 
 
-def get_sources(dir):
-    sources = []
-    for root, _, files in os.walk(dir):
-        for file in files:
-            if file.endswith('.sv'):
-                sources.append(Path(root)/file)
-    return sources
-
-
 def run_test(
-    source: str, 
     top_module: str,
+    files: str = 'src',
     test_cases: list[str] = [],
     open_waveform: bool = False
 ):
+    root = Path(__file__).parent.parent
+    build_dir = root/'test'/'.sim'/top_module
     
-    source = source.split('/')
-    src_file = '/'.join(source)
-    test_dir = '/'.join(source[:-1])
-    vivado_path = Path(__file__).parent.parent
+    # sources is a single file
+    if '.' in files: 
+        src_files = [root/'src'/Path(files)]
+        test_dir = root/'test'/Path(files).parent
+    # sources is a directory
+    else:
+        src_files = []
+        for src_dir, _, files in os.walk(root/Path(files)):
+            for file in files:
+                if file.endswith('.sv'):
+                    src_files.append(Path(src_dir)/file)
+        test_dir = root/'src'/Path(files)
+
+    print(f'Running test for {top_module} module...')
+    print(f'Build dir: {build_dir}')
+    print(f'Test dir: {test_dir}')
+    print(f'Source files:')
+    for file in src_files:
+        print(f'  - {file}')
 
     runner = get_runner(os.getenv('SIM', 'icarus'))
     runner.build(
-        sources=get_sources(),
+        sources=src_files,
         hdl_toplevel=top_module,
-        build_dir=vivado_path/'test'/'.sim'/top_module,
+        build_dir=build_dir,
         waves=open_waveform
     )
     runner.test(
         hdl_toplevel=top_module,
-        test_module=source[-1].replace('.sv', '_tb'),
-        build_dir=vivado_path/'test'/'.sim'/top_module,
-        test_dir=vivado_path/'test'/Path(test_dir),
+        test_module=top_module+'_tb',
+        build_dir=build_dir,
+        test_dir=test_dir,
         testcase=test_cases,
         waves=open_waveform
     )
+
     if plot_signals() and open_waveform:
         waveform_path = Path(__file__).parent/'.sim'
-        subprocess.Popen(['gtkwave', waveform_path/(top_module+'.fst')])
+        subprocess.Popen(['gtkwave', waveform_path/(top_module+'.fst')]) # TODO: arreglar expresión

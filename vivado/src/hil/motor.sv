@@ -1,11 +1,15 @@
+// ! # Description 
+// ! Motor model
+
 `timescale 1ns / 1ps
 
 module motor #(
-    parameter timestep = 1.0,
+    parameter timestep = 1,
+    parameter N_BITS_CURRENT = 10
 )(
     input  logic clk, nrst, en,
-    input  logic [N_BITS_VOLTAGE-1:0] v_a, v_b, v_c,
-    output logic [N_BITS_CURRENT-1:0] i_a, i_b, i_c
+    input  logic [ctrl_clk-1:0] v_a, v_b, v_c,
+    output logic [N_BITS_CURRENT-1:0] i_a, i_b, i_c,
     output logic [N_BITS_ANGLE-1:0] angle,
     output logic [N_BITS_SPEED-1:0] speed,
     output logic [N_BITS_TORQUE-1:0] torque
@@ -38,33 +42,35 @@ module motor #(
     );
 
     // Calculate currents
-    always_ff @(posedge clk) begin
+    logic signed [N_BITS_CURRENT+F_BITS_CURRENT-1:0] i_d_temp, i_q_temp;
+    always_ff @(posedge clk) begin: current_calc
         if (!nrst) begin
             i_d <= 0;
             i_q <= 0;
         end else if (en) begin
-            i_d <= i_d + timestep * 1/Ls * (v_d - R * i_d - Ls * speed * i_q);
-            i_q <= i_q + timestep * 1/Ls * (v_q - R * i_q + Ls * speed * i_d);
+            i_d_temp <= timestep * 1/Ls * (v_d - R * i_d - Ls * speed * i_q);
+            i_q_temp <= timestep * 1/Ls * (v_q - R * i_q + Ls * speed * i_d);
+            i_d <= (id + i_d_temp) >> F_BITS_CURRENT;
+            i_q <= (iq + i_q_temp) >> F_BITS_CURRENT;
         end
     end
     
     // Calculate angle
-    logic signed [N_BITS_ANGLE+F_BITS_ANGLE-1:0] angle_temp;
-    always_ff @(posedge clk) begin
-        if (!nrst) begin
-            angle <= 0;
-        end else if (en) begin
-            angle_temp <= timestep * speed;
-            angle <= angle + (angle_temp >> F_BITS_ANGLE);
+    logic signed [N_BITS_ANGLE+F_BITS_ANGLE-1:0] delta_angle;
+    always_ff @(posedge clk) begin: angle_calc
+        if (!nrst) angle <= 0;
+        else if (en) begin
+            delta_angle <= timestep * speed;
+            angle <= (angle + delta_angle) >> F_BITS_ANGLE;
         end
     end
 
     // Calculate speed
-    always_ff @(posedge clk) begin
-        if (!nrst) begin
-            speed <= 0;
-        end else if (en) begin
-            speed <= speed + timestep * 1/J * (torque - B * speed);
+    always_ff @(posedge clk) begin: speed_calc
+        if (!nrst) speed <= 0;
+        else if (en) begin
+            delta_speed <= timestep * 1/J * (torque - B*speed);
+            speed <= speed + delta_speed;
         end
     end
     

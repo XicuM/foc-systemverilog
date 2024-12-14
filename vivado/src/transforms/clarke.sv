@@ -8,7 +8,7 @@ module clarke #(
     output logic signed [WIDTH-1:0] alpha, beta
 );
     
-    // Constanta
+    // Constants
     localparam logic signed [WIDTH+FRACTIONAL_BITS-1:0] 
         ONE_OVER_SQRT_3 = $rtoi((1<<FRACTIONAL_BITS)/$sqrt(3));
     

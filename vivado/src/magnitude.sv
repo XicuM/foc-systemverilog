@@ -23,8 +23,11 @@ module magnitude #(
     endfunction
     localparam logic signed [WIDTH-1:0] SCALING_FACTOR = $rtoi(compute_gain()*(1 << FRACTIONAL_BITS));
     
-    // Input values
-    always_comb begin x[0]=x_in; y[0]=y_in; end
+    // Assign the input values
+    always_comb begin: assign_inputs
+        x[0]=x_in; 
+        y[0]=y_in; 
+    end
 
     // Unrolled CORDIC combinatorial pipeline
     generate
@@ -41,8 +44,8 @@ module magnitude #(
         end
     endgenerate
 
-    // Absolute value of the output
-    always_comb begin
+    // Assign the output value (scaled and absolute value)
+    always_comb begin: assign_output
         out_temp <= x[ITERATIONS]*SCALING_FACTOR;
         out <= out_temp > 0 ? 
             out_temp >>> FRACTIONAL_BITS : -out_temp >>> FRACTIONAL_BITS;

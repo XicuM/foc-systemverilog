@@ -1,11 +1,5 @@
 from vivado.test.utils import *
 
-
-@cocotb.test
-async def svpwm_tb(dut):
-    pass
-
-
 @cocotb.test
 async def sector_selector_tb(dut):
 
